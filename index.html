@@ -221,6 +221,42 @@
             transform: scale(1.15) translateY(-5px);
         }
 
+        /* --- NEWS FLASH --- */
+        .news-flash {
+            background: rgba(255, 140, 0, 0.1);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .news-tag {
+            background: #FF8C00;
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+
+        .news-text {
+            font-size: 0.85rem;
+            color: #fff;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes slideInDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
         @media (max-width: 768px) {
             .footer-main { grid-template-columns: 1fr; gap: 30px; }
             .screenshot-frame { min-width: 300px; height: 200px; }
@@ -251,6 +287,10 @@
 
         <!-- HERO -->
         <div class="hero-content">
+            <div class="news-flash">
+                <span class="news-tag">FLASH INFO</span>
+                <span class="news-text">MUTATION DISPONIBLE : Transformez votre Kubuntu en Shiva OS sans réinstaller !</span>
+            </div>
             <div class="trident-anchor"></div>
             <h1 class="big-title" style="filter: drop-shadow(0 0 40px rgba(255,140,0,0.4));">SHIVA OS</h1>
             <p class="tagline">La distribution <strong style="color:var(--shiva-orange)">gaming ultime</strong> bâtie sur <strong style="color:var(--shiva-orange)">Kubuntu LTS</strong>.<br>Noyau temps réel, Mesa à jour, MangoHUD, performances maximales dès l'installation.</p>
