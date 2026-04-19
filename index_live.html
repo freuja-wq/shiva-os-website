@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIVA OS | PURE GAMING ECOSYSTEM 🔱</title>
+    <link rel="stylesheet" href="styles.css">
+       <style>
+                .search-container { max-width: 600px; margin: 20px 0 60px; position: relative; }
+                     .search-input { width: 100%; background: rgba(15,18,22,0.75); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 20px 30px; color: white; font-size: 14px; outline: none; transition: 0.3s; }
+                          .search-input:focus { border-color: #ff8c00; box-shadow: 0 0 30px rgba(255, 140, 0, 0.25); }
+                               .card-image-container { width: 100%; height: 200px; border-radius: 20px; overflow: hidden; margin-bottom: 20px; }
+                                    .card-image { width: 100%; height: 100%; object-fit: cover; }
+                                       </style>
+       <style></head>
+<body>
+    <!-- 🔱 GLASS NAVIGATION -->
+    <nav class="navbar">
+        <div class="nav-brand">SHIVA <span style="color: var(--shiva-orange)">OS</span></div>
+        <div class="nav-links">
+            <a class="nav-link active" onclick="switchSection('home')">The Forge</a>
+            <a class="nav-link" onclick="switchSection('store')">The Nexus</a>
+            <a class="nav-link" onclick="switchSection('apps')">The Arsenal</a>
+            <a class="nav-link" onclick="switchSection('repo')">The Source</a>
+        </div>
+    </nav>
+
+    <!-- 🚀 HOME: THE FORGE -->
+    <section id="home" class="active">
+        <div class="hero-content">
+            <div class="trident-anchor"></div>
+            <h1 class="big-title">SHIVA OS</h1>
+            <p class="tagline">La forge ultime du gaming sur Kubuntu LTS. Redéfinissez vos performances avec un noyau optimisé et une interface Liquid Glass.</p>
+            <div class="btn-group">
+                <a class="btn-primary" onclick="switchSection('store')">Explorer le Nexus</a>
+                <a class="btn-primary" style="background: var(--glass-bg); border: 1px solid var(--glass-border);" href="https://cemail.be/shiva-os-44.iso">Download ISO</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🎮 STORE: THE NEXUS -->
+    <section id="store">
+        <div class="hero-content" style="text-align: left; padding-bottom: 60px;">
+            <span class="badge">Live Artifacts</span>
+            <h2 style="font-size: 3rem; font-weight: 900; text-transform: uppercase;">The Nexus Store</h2>
+            <p style="opacity: 0.6;">Dégottez les meilleures offres et tendances synchronisées par Oracle.</p>
+            <div class="search-container">
+                <input type="text" id="store-search" class="search-input" placeholder="RECHERCHER UN ARTEFACT (EX: FORZA, ELDEN RING...)">
+            </div>
+        </div>
+        <div id="library-grid" class="grid-container">
+            <!-- Injecté par nexus.js -->
+        </div>
+    </section>
+
+    <!-- 📦 APPS: THE ARSENAL -->
+    <section id="apps">
+        <div class="hero-content" style="text-align: left; padding-bottom: 60px;">
+            <span class="badge">Pre-installed Arsenal</span>
+            <h2 style="font-size: 3rem; font-weight: 900; text-transform: uppercase;">The Arsenal</h2>
+            <p style="opacity: 0.6;">Une suite logicielle complète, configurée pour la victoire immédiate.</p>
+        </div>
+        <div class="grid-container">
+            <div class="glass-card">
+                <div class="artifact-icon" style="background: #2b2b2b;">🎮</div>
+                <h3 style="margin-top: 20px;">Steam & Lutris</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">Le duo de choc pour gérer vos bibliothèques Windows et Linux nativement.</p>
+            </div>
+            <div class="glass-card">
+                <div class="artifact-icon" style="background: #5865F2;">💬</div>
+                <h3 style="margin-top: 20px;">Discord & Comms</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">Restez connecté avec un client Discord optimisé et thémé aux couleurs de Shiva.</p>
+            </div>
+            <div class="glass-card">
+                <div class="artifact-icon" style="background: #e67e22;">🍷</div>
+                <h3 style="margin-top: 20px;">Bottles & Heroic</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">Lancement fluide des jeux Epic Games et GOG via des environnements Wine isolés.</p>
+            </div>
+            <div class="glass-card">
+                <div class="artifact-icon" style="background: #e74c3c;">🔥</div>
+                <h3 style="margin-top: 20px;">Shiva Oracle</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">Notre moteur IA interne qui optimise vos ressources système en temps réel.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🔗 REPO: THE SOURCE -->
+    <section id="repo">
+        <div class="hero-content" style="text-align: left; padding-bottom: 60px;">
+            <span class="badge">System Core</span>
+            <h2 style="font-size: 3rem; font-weight: 900; text-transform: uppercase;">The Source</h2>
+            <p style="opacity: 0.6;">Dépôts officiels et politiques de mises à jour de Shiva OS.</p>
+        </div>
+        <div class="artifact-list">
+            <div class="artifact-item">
+                <div class="artifact-icon">⚙️</div>
+                <div>
+                    <h4>Dépôt Shiva Purity</h4>
+                    <p style="opacity: 0.5; font-size: 0.8rem;">Pour les installations Kubuntu existantes :</p>
+                    <div class="command-box">
+                        <span>sudo add-apt-repository ppa:shiva-os/purity</span>
+                        <button class="copy-btn">COPY</button>
+                    </div>
+                </div>
+            </div>
+            <div class="artifact-item">
+                <div class="artifact-icon">🔄</div>
+                <div>
+                    <h4>Mises à jour Garanties</h4>
+                    <p style="opacity: 0.7;">Chaque composant de Shiva OS est mis à jour chaque semaine. De la version du noyau aux thèmes CSS, votre système reste toujours à la pointe.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="text-align: center; padding: 60px; opacity: 0.3; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;">
+        &copy; 2026 SHIVA OS PROJECT | FORGED ON KUBUNTU LTS
+    </footer>
+
+    <!-- Logic Engine -->
+    <script src="nexus.js"></script>
+</body>
+</html>

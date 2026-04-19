@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIVA OS | Pure Gaming Ecosystem 🔱</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔱</text></svg>">
+    <meta name="description" content="Shiva OS 26.04 LTS — La distribution gaming ultime bâtie sur Kubuntu LTS. Noyau temps réel, Mesa à jour, MangoHUD, Shiva Store intégré.">
+    <link rel="stylesheet" href="styles.css?v=12">
+    <style>
+        /* SCROLL PROGRESS BAR */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--shiva-orange), var(--shiva-vulkan));
+            z-index: 9999;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(255,140,0,0.6);
+        }
+
+        /* STATS SECTION */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 80px auto 0;
+            text-align: center;
+        }
+        .stat-card {
+            padding: 30px 20px;
+            background: var(--shiva-accent);
+            border: 1px solid rgba(255,140,0,0.15);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            border-color: var(--shiva-orange);
+            transform: translateY(-5px);
+        }
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--shiva-orange);
+            font-family: var(--font-mono);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            opacity: 0.5;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        /* SCREENSHOTS */
+        .screenshot-strip {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0 40px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--shiva-orange) transparent;
+        }
+        .screenshot-frame {
+            min-width: 600px;
+            height: 360px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            background: var(--shiva-gray);
+        }
+        .screenshot-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .screenshot-frame:hover img {
+            transform: scale(1.05);
+        }
+        .screenshot-label {
+            position: absolute;
+            bottom: 15px;
+            left: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--shiva-orange);
+            background: rgba(0,0,0,0.6);
+            padding: 5px 12px;
+            border-radius: 10px;
+        }
+
+        /* FAQ */
+        .faq-item {
+            border: 1px solid var(--glass-border);
+            background: var(--shiva-accent);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+        .faq-item:hover { border-color: rgba(255,140,0,0.3); }
+        .faq-question {
+            padding: 22px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: transparent;
+            color: var(--text-main);
+            user-select: none;
+        }
+        .faq-arrow {
+            color: var(--shiva-orange);
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s;
+            padding: 0 30px;
+            opacity: 0.6;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            padding: 0 30px 22px;
+            color: var(--text-dim);
+        }
+        .faq-item.open .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* COMMUNITY */
+        .community-card {
+            background: linear-gradient(135deg, rgba(255,140,0,0.08), rgba(255,69,0,0.04));
+            border: 1px solid rgba(255,140,0,0.2);
+            border-radius: 40px;
+            padding: 80px 60px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-main);
+        }
+
+        /* FOOTER */
+        .footer-main {
+            background: rgba(255,255,255,0.02);
+            border-top: 1px solid var(--glass-border);
+            padding: 60px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a {
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover { color: var(--shiva-orange); }
+        .footer-bottom {
+            text-align: center;
+            padding: 40px 60px;
+            font-size: 12px;
+            opacity: 0.5;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-dim);
+        }
+
+        /* SPECS TABLE */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .specs-table th {
+            text-align: left;
+            padding: 12px 20px;
+            color: var(--shiva-orange);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .specs-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            opacity: 0.7;
+        }
+        .specs-table tr:last-child td { border-bottom: none; }
+
+        /* LAUNCHER LOGOS */
+        .launcher-logo {
+            height: 35px;
+            opacity: 0.3;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: grayscale(100%);
+        }
+        .launcher-logo:hover {
+            opacity: 1;
+            filter: grayscale(0%) drop-shadow(0 0 15px rgba(255,140,0,0.6));
+            transform: scale(1.15) translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .footer-main { grid-template-columns: 1fr; gap: 30px; }
+            .screenshot-frame { min-width: 300px; height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- SCROLL PROGRESS -->
+    <div id="scroll-progress"></div>
+
+    <!-- 🔱 GLASS NAVIGATION -->
+    <nav class="navbar">
+        <div class="nav-brand">SHIVA <span style="color: var(--shiva-orange)">OS</span></div>
+        <div class="nav-links">
+            <a class="nav-link active" onclick="switchSection('home')">The Forge</a>
+            <a class="nav-link" onclick="switchSection('store')">Shiva Store</a>
+            <a class="nav-link" onclick="switchSection('apps')">L'Armurerie</a>
+            <a class="nav-link" onclick="switchSection('shield')">Nexus Shield</a>
+            <a class="nav-link" onclick="switchSection('sanctum')">Le Sanctum</a>
+            <a class="nav-link" onclick="switchSection('repo')">The Source</a>
+            <a class="nav-link" onclick="switchSection('news')">Actualités</a>
+        </div>
+        <button id="theme-toggle" style="background:none;border:none;cursor:pointer;font-size:1.2rem;margin-left:20px;padding:5px;" title="Changer le thème">🌓</button>
+    </nav>
+
+    <!-- 🚀 HOME -->
+    <section id="home" class="active">
+
+        <!-- HERO -->
+        <div class="hero-content">
+            <div class="trident-anchor"></div>
+            <h1 class="big-title" style="filter: drop-shadow(0 0 40px rgba(255,140,0,0.4));">SHIVA OS</h1>
+            <p class="tagline">La distribution <strong style="color:var(--shiva-orange)">gaming ultime</strong> bâtie sur <strong style="color:var(--shiva-orange)">Kubuntu LTS</strong>.<br>Noyau temps réel, Mesa à jour, MangoHUD, performances maximales dès l'installation.</p>
+            <div class="btn-group">
+                <a class="btn-primary" onclick="switchSection('store')">Explorer le Shiva Store</a>
+                <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 30px;border-radius:50px;border:1px solid rgba(255,140,0,0.35);background:rgba(255,140,0,0.06);cursor:default;">
+                    <span style="font-size:8px;opacity:0.5;letter-spacing:3px;text-transform:uppercase;">ISO Bientôt</span>
+                    <span style="font-size:11px;font-weight:900;letter-spacing:2px;color:var(--shiva-orange);">SHIVAOS 26.04 LTS</span>
+                </div>
+            </div>
+            <div id="countdown" style="margin-top: 50px; display: flex; gap: 20px; justify-content: center; font-family: var(--font-mono); align-items: center;"></div>
+        </div>
+
+        <!-- STATS -->
+        <div style="max-width:1400px;margin:100px auto 0;padding:0 40px;">
+            <div style="text-align:center;margin-bottom:40px;">
+                <span class="badge">Shiva OS en chiffres</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Bloatware</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Ans de support LTS</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Open Source</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">RT</div>
+                    <div class="stat-label">Noyau Temps Réel</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">+50</div>
+                    <div class="stat-label">Jeux testés & validés</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEATURES -->
+        <div style="max-width:1400px;margin:100px auto 0;padding:0 40px;">
+            <div style="text-align:center;margin-bottom:60px;">
+                <span class="badge">Pourquoi Shiva OS ?</span>
+                <h2 style="font-size:2.5rem;font-weight:900;text-transform:uppercase;margin-top:20px;">Ce que fait <span style="color:var(--shiva-orange)">Shiva OS</span></h2>
+                <p style="color:var(--text-dim);margin-top:10px;">Pas une distro de plus. Un système pensé exclusivement pour le gaming.</p>
+            </div>
+            <div class="grid-container" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;">
+                <div class="glass-card" style="padding:35px;">
+                    <div style="font-size:2.5rem;margin-bottom:20px;">⚡</div>
+                    <h3 style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;">Noyau Temps Réel</h3>
+                    <p style="color:var(--text-dim);font-size:0.9rem;margin-top:12px;line-height:1.7;">Noyau Linux RT optimisé pour l'eSport et les AAA. Latence minimale, priorité CPU garantie pour les jeux.</p>
+                </div>
+                <div class="glass-card" style="padding:35px;">
+                    <div style="font-size:2.5rem;margin-bottom:20px;">🎮</div>
+                    <h3 style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;">Gaming Prêt à l'emploi</h3>
+                    <p style="color:var(--text-dim);font-size:0.9rem;margin-top:12px;line-height:1.7;">Steam, Lutris, Bottles, Proton et <strong style="color:rgba(255,140,0,0.8)">GameMode</strong> préconfigurés. Lancez vos jeux Windows dès le premier démarrage.</p>
+                </div>
+                <div class="glass-card" style="padding:35px;">
+                    <div style="font-size:2.5rem;margin-bottom:20px;">🖥️</div>
+                    <h3 style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;">Interface Liquid Glass</h3>
+                    <p style="color:var(--text-dim);font-size:0.9rem;margin-top:12px;line-height:1.7;">KDE Plasma entièrement thémé aux couleurs de Shiva OS. Un bureau qui en impose dès l'allumage.</p>
+                </div>
+                <div class="glass-card" style="padding:35px;">
+                    <div style="font-size:2.5rem;margin-bottom:20px;">🛡️</div>
+                    <h3 style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;">Base Kubuntu LTS</h3>
+                    <p style="color:var(--text-dim);font-size:0.9rem;margin-top:12px;line-height:1.7;">Bâti sur Kubuntu 26.04 LTS — 5 ans de support garanti, stabilité maximale, dépôts Ubuntu officiels.</p>
+                </div>
+                <div class="glass-card" style="padding:35px;">
+                    <div style="font-size:2.5rem;margin-bottom:20px;">🛒</div>
+                    <h3 style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;">Shiva Store intégré</h3>
+                    <p style="color:var(--text-dim);font-size:0.9rem;margin-top:12px;line-height:1.7;">Notre boutique gaming synchronisée en temps réel. Meilleures offres, tendances et précommandes PC.</p>
+                </div>
+                <div class="glass-card" style="padding:35px;">
+                    <div style="font-size:2.5rem;margin-bottom:20px;">🔄</div>
+                    <h3 style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;">Mises à jour Hebdo</h3>
+                    <p style="color:var(--text-dim);font-size:0.9rem;margin-top:12px;line-height:1.7;">Chaque semaine : noyau, thèmes, optimisations. Shiva OS évolue constamment pour rester à la pointe.</p>
+                </div>
+                <div class="glass-card" style="padding:35px; border-color: rgba(255,140,0,0.25);">
+                    <div style="font-size:2.5rem;margin-bottom:20px;">🐲</div>
+                    <h3 style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;">Mesa & GPU à Jour</h3>
+                    <p style="color:var(--text-dim);font-size:0.9rem;margin-top:12px;line-height:1.7;">Drivers <strong style="color:rgba(255,140,0,0.8)">Mesa</strong> toujours à la dernière version stable. Support AMD RDNA, Intel Arc et Vulkan optimisé pour chaque GPU.</p>
+                </div>
+                <div class="glass-card" style="padding:35px;">
+                    <div style="font-size:2.5rem;margin-bottom:20px;">📊</div>
+                    <h3 style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;">MangoHUD & Perf</h3>
+                    <p style="color:var(--text-dim);font-size:0.9rem;margin-top:12px;line-height:1.7;"><strong style="color:rgba(255,140,0,0.8)">MangoHUD</strong> préinstallé pour monitorer FPS, GPU, CPU et RAM en temps réel directement dans le jeu.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREENSHOTS -->
+        <div style="max-width:1400px;margin:100px auto 0;padding:0 40px;">
+            <div style="text-align:center;margin-bottom:50px;">
+                <span class="badge">Aperçu Réel</span>
+                <h2 style="font-size:2.5rem;font-weight:900;text-transform:uppercase;margin-top:20px;">L'Expérience <span style="color:var(--shiva-orange)">Shiva OS</span></h2>
+                <p style="color:var(--text-dim);margin-top:10px;">Le futur du gaming Linux entre vos mains. Performance, Design, Fluidité.</p>
+            </div>
+            <div class="screenshot-strip">
+                <div class="screenshot-frame">
+                    <img src="shivaos_desktop_gaming_proof_1776594554465.png" alt="Shiva OS Gaming Proof">
+                    <div class="screenshot-label">Performance AAA avec MangoHUD</div>
+                </div>
+                <div class="screenshot-frame">
+                    <img src="shivaos_settings_rt_kernel_1776594572582.png" alt="Shiva OS Settings UI">
+                    <div class="screenshot-label">Noyau Temps Réel 7.0 & Mesa 26.1</div>
+                </div>
+                <div class="screenshot-frame">
+                    <img src="assets/mockup.png" alt="Shiva OS Layout">
+                    <div class="screenshot-label">Interface Liquid Glass (Onyx/Orange)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LE MOT DU FORGERON -->
+        <div style="max-width:900px;margin:100px auto 0;padding:40px;background:linear-gradient(135deg, rgba(255,140,0,0.05), transparent);border-left:3px solid var(--shiva-orange);border-top-right-radius:20px;border-bottom-right-radius:20px;">
+            <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
+                <div style="width:50px;height:50px;border-radius:50%;background:rgba(255,140,0,0.1);border:1px solid rgba(255,140,0,0.3);display:flex;justify-content:center;align-items:center;font-size:1.5rem;">🎮</div>
+                <div>
+                    <h3 style="font-size:1.2rem;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:var(--text-main);">Le mot du Forgeron</h3>
+                    <p style="font-size:0.8rem;opacity:0.5;letter-spacing:2px;text-transform:uppercase;color:var(--shiva-orange);">Cédric Decelle — Fondateur</p>
+                </div>
+            </div>
+            <p style="font-size:0.95rem;line-height:1.8;color:var(--text-dim);font-style:italic;">
+                « Gamer depuis l'âge de 6 ans, j'en ai aujourd'hui 43. J'ai toujours voulu apporter ma pierre à l'édifice dans ce milieu qui me passionne. Voir Linux s’imposer comme une plateforme surpuissante pour le jeu vidéo a été un véritable déclic. J'ai voulu participer à cette liberté, pour qu'on puisse enfin s'affranchir de Windows. Nous y sommes presque ! Il ne manque plus que l'ouverture de certains anti-cheats (comme sur Call of Duty ou Battlefield)... Mais pour tout le reste, la machine tourne à merveille. Bienvenue sur Shiva OS. »
+            </p>
+        </div>
+
+        <!-- FAQ -->
+        <div style="max-width:900px;margin:100px auto 0;padding:0 40px;">
+            <div style="text-align:center;margin-bottom:50px;">
+                <span class="badge">Questions fréquentes</span>
+                <h2 style="font-size:2.5rem;font-weight:900;text-transform:uppercase;margin-top:20px;">FAQ</h2>
+            </div>
+            <div id="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Shiva OS est-il compatible avec les GPU AMD et NVIDIA ?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">Oui ! Shiva OS inclut les drivers Mesa à jour pour AMD (RDNA 1/2/3) et Intel Arc. Pour NVIDIA, les drivers propriétaires sont disponibles via le gestionnaire de pilotes. Les deux sont testés et validés.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Quelle est la différence avec Ubuntu ou Kubuntu classique ?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">Shiva OS est une surcouche gaming complète : noyau temps réel, GameMode, MangoHUD, Proton, Lutris et Bottles sont préconfigurés dès l'installation. Zéro configuration manuelle, 100% prêt à jouer.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Puis-je jouer à des jeux Windows sous Shiva OS ?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">Absolument. Proton (Steam), Wine (Bottles/Lutris) et Heroic pour les jeux Epic/GOG sont tous préinstallés. La majorité des jeux AAA Windows fonctionnent nativement. Consultez ProtonDB pour la compatibilité par jeu.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Quelles sont les configurations minimales requises ?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">CPU : x86_64 double cœur (Intel Core 2 Duo ou AMD Athlon 64 X2 minimum). RAM : 4 Go minimum, 8 Go recommandé. Stockage : 25 Go minimum. GPU : Compatible Vulkan recommandé pour les jeux AAA.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Shiva OS reçoit-il des mises à jour régulières ?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">Oui, chaque semaine. Basé sur Kubuntu 26.04 LTS (5 ans de support), Shiva OS reçoit les mises à jour de sécurité Ubuntu + ses propres optimisations gaming via le dépôt PPA officiel ppa:shiva-os/purity.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Quand sort l'ISO ShivaOS 26.04 LTS ?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">L'ISO ShivaOS 26.04 LTS est prévue pour le 24 avril 2026 à 22h00. Le compte à rebours en haut de page s'arrêtera automatiquement au moment du lancement. Restez connectés !</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMMUNITY / DISCORD -->
+        <div style="max-width:1400px;margin:100px auto 0;padding:0 40px 40px;">
+            <div class="community-card">
+                <div style="font-size:4rem;margin-bottom:20px;">🔱</div>
+                <h2 style="font-size:2.5rem;font-weight:900;text-transform:uppercase;">Rejoindre la communauté</h2>
+                <p style="color:var(--text-dim);margin:20px auto;max-width:500px;line-height:1.8;">Des gamers passionnés, des retours en temps réel, des annonces en avant-première. Le serveur Discord de Shiva OS vous attend.</p>
+                <div class="btn-group" style="justify-content:center;margin-top:40px;">
+                    <a class="btn-primary" href="https://discord.gg/shivaos" target="_blank" style="background: #5865F2;box-shadow:0 0 30px rgba(88,101,242,0.3);">💬 Discord</a>
+                    <a class="btn-primary" href="https://github.com/shivaos" target="_blank" style="background:var(--glass-bg);border:1px solid var(--glass-border);">⭐ GitHub</a>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- 🎮 SHIVA STORE -->
+    <section id="store">
+        <div class="hero-content" style="text-align: left; padding-bottom: 60px;">
+            <span class="badge">Jeux en Direct</span>
+            <h2 style="font-size: 3rem; font-weight: 900; text-transform: uppercase;">Shiva Store</h2>
+            <p style="opacity: 0.6;">Dégottez les meilleures offres et tendances synchronisées par Oracle.</p>
+            <div class="search-container">
+                <input type="text" id="store-search" class="search-input" placeholder="RECHERCHER UN JEU (EX: FORZA, ELDEN RING...)">
+            </div>
+        </div>
+        <div id="library-grid" class="grid-container"></div>
+    </section>
+
+    <!-- 📦 L'ARMURERIE -->
+    <section id="apps">
+        <div class="hero-content" style="text-align: left; padding-bottom: 60px;">
+            <span class="badge">Shiva Gaming Kit</span>
+            <h2 style="font-size: 3rem; font-weight: 900; text-transform: uppercase;">L'Armurerie</h2>
+            <p style="opacity: 0.6;">Les outils de combat essentiels, forgés pour la performance absolue.</p>
+        </div>
+        <div class="grid-container">
+            <div class="glass-card">
+                <div class="artifact-icon" style="background: #2b2b2b;">🎮</div>
+                <h3 style="margin-top: 20px;">Steam & Lutris</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">Le duo de choc pour gérer vos bibliothèques Windows et Linux nativement.</p>
+            </div>
+            <div class="glass-card">
+                <div class="artifact-icon" style="background: #5865F2;">💬</div>
+                <h3 style="margin-top: 20px;">Discord & Comms</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">Restez connecté avec un client Discord optimisé et thémé aux couleurs de Shiva.</p>
+            </div>
+            <div class="glass-card">
+                <div class="artifact-icon" style="background: #e67e22;">🍷</div>
+                <h3 style="margin-top: 20px;">Bottles & Heroic</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">Lancement fluide des jeux Epic Games et GOG via des environnements Wine isolés.</p>
+            </div>
+            <div class="glass-card">
+                <div class="artifact-icon" style="background: #27ae60;">🎥</div>
+                <h3 style="margin-top: 20px;">OBS Studio</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">L'outil ultime pour le streaming et l'enregistrement vidéo haute performance.</p>
+            </div>
+            <div class="glass-card">
+                <div class="artifact-icon" style="background: #d35400;">🎬</div>
+                <h3 style="margin-top: 20px;">VLC Player</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">Le lecteur universel, propre et capable de tout lire sans codec externe.</p>
+            </div>
+            <div class="glass-card">
+                <div class="artifact-icon" style="background: #1a1a2e;">📊</div>
+                <h3 style="margin-top: 20px;">MangoHUD</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">Overlay de performance en temps réel — FPS, GPU, CPU, RAM directement dans le jeu.</p>
+            </div>
+            <div class="glass-card" style="border-color: rgba(255,140,0,0.3);">
+                <div class="artifact-icon" style="background: #004d00;">🐲</div>
+                <h3 style="margin-top: 20px;">Mesa & Vulkan</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 10px;">Support complet de Vulkan 1.3 et drivers Mesa (Git/Stable) pour vos GPU.</p>
+            </div>
+        </div>
+    </section>
+  
+    <!-- 🛡️ NEXUS SHIELD -->
+    <section id="shield">
+        <div class="hero-content" style="text-align: left; padding-bottom: 60px;">
+            <span class="badge">Shield of Compatibility</span>
+            <h2 style="font-size: 3rem; font-weight: 900; text-transform: uppercase;">Nexus Shield</h2>
+            <p style="opacity: 0.6;">Vérifiez instantanément la compatibilité de vos jeux et de votre matériel.</p>
+            
+            <div class="shield-search-container">
+                <input type="text" id="shield-search" class="shield-search-input" placeholder="RECHERCHER UN JEU (EX: CALL OF DUTY, RUST, APEX...)">
+            </div>
+        </div>
+
+        <div style="max-width:1400px;margin:0 auto;padding:0 40px;">
+            <div id="shield-results" class="shield-grid">
+                <!-- Dynamically populated by nexus.js -->
+            </div>
+
+            <div style="margin-top: 100px; border-top: 1px solid var(--glass-border); padding-top: 60px;">
+                <span class="badge">Hardware Alliance</span>
+                <h3 style="font-size: 2rem; margin-top: 20px;">VOTRE CONFIGURATION</h3>
+                <div id="hardware-alliance-status" class="hardware-grid">
+                    <!-- Detected via JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📖 LE SANCTUM -->
+    <section id="sanctum">
+        <div class="hero-content" style="text-align: left; padding-bottom: 60px;">
+            <span class="badge">Knowledge Hub</span>
+            <h2 style="font-size: 3rem; font-weight: 900; text-transform: uppercase;">Le Sanctum</h2>
+            <p style="opacity: 0.6;">Aide, guides et assistance technique pour Shiva OS.</p>
+        </div>
+
+        <div style="max-width:900px;margin:0 auto;padding:0 40px;">
+            <div id="sanctum-faq">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        🔱 Comment installer Shiva OS ?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Téléchargez l'ISO (disponible le 24 avril), flashez-la sur une clé USB avec BalenaEtcher ou Rufus, et bootez dessus. L'installateur Calamares vous guidera étape par étape.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        🎮 Optimiser NVIDIA pour Shiva OS 26.04
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Shiva OS utilise le driver propriétaire 560+ par défaut. Pour vérifier ou changer : ouvrez le "Gestionnaire de Pilotes" dans les paramètres système. Activez le "Full Composition Pipeline" pour éviter le tearing.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        🛡️ Anti-Cheat : Pourquoi ça bloque ?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Certains jeux (Call of Duty, Valorant) utilisent des Anti-Cheats au niveau noyau (Kernel) qui ne sont pas compatibles avec Linux. Nous travaillons avec la communauté pour améliorer ce support, mais pour l'instant, ces jeux sont bloqués.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        ⚡ Activer le Mode eSport (Noyau RT)
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Le noyau Temps Réel (RT) est actif par défaut sur Shiva OS. Il garantit que votre jeu a toujours la priorité absolue sur les ressources CPU. Pas besoin de configuration supplémentaire.
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px; text-align: center;">
+                <p style="opacity: 0.5; font-size: 0.9rem; margin-bottom: 25px;">Besoin d'une aide plus spécifique ?</p>
+                <a class="btn-primary" href="https://discord.gg/shivaos" target="_blank" style="background: #5865F2;">REJOINDRE LE SUPPORT DISCORD</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🔗 THE SOURCE -->
+    <section id="repo">
+        <div class="hero-content" style="text-align: left; padding-bottom: 60px;">
+            <span class="badge">System Core</span>
+            <h2 style="font-size: 3rem; font-weight: 900; text-transform: uppercase;">The Source</h2>
+            <p style="opacity: 0.6;">Dépôts officiels, mises à jour et configurations système de Shiva OS.</p>
+            
+            <div style="margin-top: 20px; display: flex; align-items: center; gap: 10px;">
+                <span class="status-verified" style="padding: 4px 12px; border-radius: 8px; font-size: 10px; font-weight: 900;">ISO OFFICIELLE : CONFIGURÉ PAR DÉFAUT</span>
+                <p style="font-size: 11px; opacity: 0.5;">Les dépôts ci-dessous sont déjà actifs sur votre installation Shiva OS.</p>
+            </div>
+        </div>
+        <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+            <div>
+                <div class="artifact-list">
+                    <div class="artifact-item">
+                        <div class="artifact-icon">⚙️</div>
+                        <div>
+                            <h4>Dépôt Shiva Purity</h4>
+                            <p style="opacity: 0.5; font-size: 0.8rem;">Pour les installations Kubuntu existantes :</p>
+                            <div class="command-box">
+                                <span>sudo add-apt-repository ppa:shiva-os/purity</span>
+                                <button class="copy-btn">COPY</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="artifact-item">
+                        <div class="artifact-icon">📦</div>
+                        <div>
+                            <h4>Mise à jour du système</h4>
+                            <p style="opacity: 0.5; font-size: 0.8rem;">Après ajout du dépôt :</p>
+                            <div class="command-box">
+                                <span>sudo apt update && sudo apt upgrade -y</span>
+                                <button class="copy-btn">COPY</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="artifact-item">
+                        <div class="artifact-icon">🐲</div>
+                        <div>
+                            <h4>Mettre à jour Mesa</h4>
+                            <p style="opacity: 0.5; font-size: 0.8rem;">Pour forcer la dernière version Mesa :</p>
+                            <div class="command-box">
+                                <span>sudo add-apt-repository ppa:kisak/kisak-mesa -y && sudo apt upgrade -y</span>
+                                <button class="copy-btn">COPY</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="artifact-item" style="flex-direction:column;align-items:flex-start;gap:20px;">
+                    <h4 style="font-size:1rem;text-transform:uppercase;letter-spacing:2px;">⚙️ Configuration minimale</h4>
+                    <table class="specs-table">
+                        <tr><th>Composant</th><th>Minimum</th><th>Recommandé</th></tr>
+                        <tr><td>CPU</td><td>Dual-core 64bit</td><td>Quad-core+</td></tr>
+                        <tr><td>RAM</td><td>4 Go</td><td>8 Go+</td></tr>
+                        <tr><td>Stockage</td><td>25 Go</td><td>50 Go SSD</td></tr>
+                        <tr><td>GPU</td><td>Compatible OpenGL 3.3</td><td>Vulkan / RDNA2+</td></tr>
+                        <tr><td>Réseau</td><td>—</td><td>Connexion pour updates</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📰 ACTUALITÉS / NEWS -->
+    <section id="news" style="padding-top:120px; padding-bottom:80px;">
+        <div style="max-width:900px; margin:0 auto; padding:0 40px;">
+            <div style="text-align:center; margin-bottom:60px;">
+                <span class="badge">Dernières Transmissions</span>
+                <h2 style="font-size:3rem; font-weight:900; text-transform:uppercase; margin-top:20px; letter-spacing:4px;">Actualités</h2>
+            </div>
+            
+            <div class="news-card" style="background:rgba(255,255,255,0.02); border:1px solid var(--glass-border); border-radius:20px; padding:40px; position:relative; overflow:hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+                <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--shiva-orange);"></div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:20px;">
+                    <span style="color:var(--shiva-orange); font-size:0.8rem; letter-spacing:2px; font-weight:bold; text-transform:uppercase;">Transmission #001</span>
+                    <span style="opacity:0.6; font-size:0.8rem;">20 Avril 2026</span>
+                </div>
+                <h3 style="font-size:1.8rem; font-weight:900; margin-bottom:20px; color:white;">L'écosystème pur gaming s'apprête à débarquer ! 🔱</h3>
+                <div style="color:var(--text-dim); line-height:1.8; font-size:1rem; display:flex; flex-direction:column; gap:15px;">
+                    <p>Salut à tous et à toutes ! 👋</p>
+                    <p>Je m'appelle Cédric Decelle, j'ai 43 ans aujourd'hui et je suis un joueur passionné depuis l'âge de 6 ans. L'informatique et le gaming ont toujours été le fil rouge de ma vie.</p>
+                    <p>Depuis des années, je regarde Linux évoluer avec l’espoir qu’un jour, on puisse enfin s’affranchir définitivement de Windows pour jouer dans d'excellentes conditions. Aujourd’hui, grâce aux avancées incroyables (Proton, Mesa, DXVK), la machine tourne à merveille. À part quelques anti-cheats récalcitrants, le futur du jeu vidéo est sur Linux.</p>
+                    <p>J'ai donc décidé d'apporter ma pierre à l'édifice. J'ai passé énormément de temps ces derniers mois, des nuits entières, à forger, configurer et optimiser un système de A à Z. Je n'avais jamais fait un projet d'une telle envergure avant, mais le résultat est là.</p>
+                    <p>Je suis extrêmement fier de vous annoncer le lancement imminent de <strong style="color:white;">SHIVA OS (Basé sur Kubuntu 26.04 LTS)</strong> ! 🚀</p>
+                    
+                    <div style="background:rgba(255,140,0,0.05); padding:25px; border-radius:10px; border:1px solid rgba(255,140,0,0.2); margin:15px 0;">
+                        <h4 style="color:white; margin-bottom:15px; font-size:1.1rem; text-transform:uppercase; letter-spacing:1px;">Shiva OS, qu'est-ce que c'est ?</h4>
+                        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:10px; margin:0;">
+                            <li>🔥 <strong style="color:var(--shiva-orange);">Noyau Temps Réel (7.0 RT)</strong> : Latence inexistante (zéro input lag).</li>
+                            <li>🎮 <strong style="color:var(--shiva-orange);">Drivers Mesa ultra à jour</strong> : Pour exploiter vos GPU AMD RDNA et Intel.</li>
+                            <li>🛡️ <strong style="color:var(--shiva-orange);">Nexus Shield</strong> : Base de données web pour vérifier la compatibilité de vos jeux en instant.</li>
+                            <li>⚙️ <strong style="color:var(--shiva-orange);">Prêt à l'emploi</strong> : Steam, Heroic Games, Lutris, Bottles préinstallés.</li>
+                            <li>🛒 <strong style="color:var(--shiva-orange);">Shiva Store</strong> : Un partenariat exclusif avec Instant Gaming pour trouver vos jeux moins chers tout en soutenant le développement du projet !</li>
+                        </ul>
+                    </div>
+                    
+                    <p style="font-weight:900; color:var(--shiva-orange); font-size:1.2rem; text-align:center; padding:15px 0; border-top:1px dashed rgba(255,140,0,0.3); border-bottom:1px dashed rgba(255,140,0,0.3); letter-spacing:1px;">
+                        📅 LANCEMENT OFFICIEL : 24 AVRIL 2026 À 22H00 !
+                    </p>
+                    
+                    <p>J'espère de tout cœur que cette version vous plaira et qu'elle vous permettra de redécouvrir vos bibliothèques de jeux sous un nouveau jour. Étant seul sur ce projet colossal, votre soutien, vos retours et votre bienveillance seront ma plus grande récompense !</p>
+                    <p style="font-style:italic; opacity:0.7;">(Je mettrai bientôt en place un système pour ceux qui souhaitent m'épauler ou aider le projet à grandir).</p>
+                    <p style="margin-top:20px;">Merci à tous pour votre aventure à mes côtés !<br><strong style="color:white; font-size:1.1rem;">— Cédric Decelle, Le Forgeron</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="margin-top:80px;">
+        <div class="footer-main">
+            <div>
+                <div style="font-size:1.5rem;font-weight:900;letter-spacing:5px;margin-bottom:15px;color:var(--text-main);">SHIVA <span style="color:var(--shiva-orange)">OS</span></div>
+                <p style="color:var(--text-dim);font-size:0.85rem;line-height:1.8;max-width:300px;">La distribution gaming ultime bâtie sur Kubuntu LTS 26.04. Noyau RT, Mesa à jour, Shiva Store intégré.</p>
+                <div style="display:flex;gap:15px;margin-top:25px;">
+                    <a href="https://discord.gg/shivaos" target="_blank" style="color:rgba(255,255,255,0.4);text-decoration:none;font-size:1.3rem;transition:color 0.3s;" onmouseover="this.style.color='#5865F2'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">💬</a>
+                    <a href="https://github.com/shivaos" target="_blank" style="color:rgba(255,255,255,0.4);text-decoration:none;font-size:1.3rem;transition:color 0.3s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">⭐</a>
+                </div>
+            </div>
+            <div>
+                <p style="font-size:10px;letter-spacing:2px;opacity:0.4;text-transform:uppercase;margin-bottom:20px;">Navigation</p>
+                <ul class="footer-links">
+                    <li><a onclick="switchSection('home');return false;" href="#">The Forge</a></li>
+                    <li><a onclick="switchSection('store');return false;" href="#">Shiva Store</a></li>
+                    <li><a onclick="switchSection('apps');return false;" href="#">L'Armurerie</a></li>
+                    <li><a onclick="switchSection('repo');return false;" href="#">The Source</a></li>
+                    <li><a onclick="switchSection('news');return false;" href="#">Actualités</a></li>
+                </ul>
+            </div>
+            <div>
+                <p style="font-size:10px;letter-spacing:2px;opacity:0.4;text-transform:uppercase;margin-bottom:20px;">Écosystème</p>
+                <ul class="footer-links">
+                    <li><a href="https://github.com/shivaos" target="_blank"><img src="https://cdn.simpleicons.org/github/white" height="12" style="margin-right:8px;vertical-align:middle;opacity:0.7">GitHub</a></li>
+                    <li><a href="https://discord.gg/shivaos" target="_blank"><img src="https://cdn.simpleicons.org/discord/white" height="12" style="margin-right:8px;vertical-align:middle;opacity:0.7">Discord</a></li>
+                    <li><a href="https://www.kubuntu.org/" target="_blank"><img src="https://cdn.simpleicons.org/ubuntu/white" height="12" style="margin-right:8px;vertical-align:middle;opacity:0.7">Kubuntu LTS</a></li>
+                    <li><a href="https://www.protondb.com/" target="_blank"><img src="https://cdn.simpleicons.org/linux/white" height="12" style="margin-right:8px;vertical-align:middle;opacity:0.7">ProtonDB</a></li>
+                    <li><a href="https://www.instant-gaming.com/" target="_blank"><svg height="12" viewBox="0 0 24 24" style="margin-right:8px;vertical-align:middle;opacity:0.7;fill:white"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>Instant Gaming</a></li>
+                </ul>
+            </div>
+            <div>
+                <p style="font-size:10px;letter-spacing:2px;opacity:0.4;text-transform:uppercase;margin-bottom:20px;">Plateformes & Launchers</p>
+                <ul class="footer-links">
+                    <li><a href="https://store.steampowered.com/" target="_blank"><img src="https://cdn.simpleicons.org/steam/white" height="12" style="margin-right:8px;vertical-align:middle;opacity:0.7">Steam</a></li>
+                    <li><a href="https://store.epicgames.com/" target="_blank"><img src="https://cdn.simpleicons.org/epicgames/white" height="12" style="margin-right:8px;vertical-align:middle;opacity:0.7">Epic Games</a></li>
+                    <li><a href="https://www.gog.com/" target="_blank"><img src="https://cdn.simpleicons.org/gogdotcom/white" height="12" style="margin-right:8px;vertical-align:middle;opacity:0.7">GOG.com</a></li>
+                    <li><a href="https://battle.net/" target="_blank"><img src="https://cdn.simpleicons.org/battledotnet/white" height="12" style="margin-right:8px;vertical-align:middle;opacity:0.7">Battle.net</a></li>
+                    <li><a href="https://www.ea.com/ea-app" target="_blank"><img src="https://cdn.simpleicons.org/ea/white" height="12" style="margin-right:8px;vertical-align:middle;opacity:0.7">EA App</a></li>
+                    <li><a href="https://ubisoftconnect.com/" target="_blank"><img src="https://cdn.simpleicons.org/ubisoft/white" height="12" style="margin-right:8px;vertical-align:middle;opacity:0.7">Ubisoft Connect</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Shiva OS Project — Forged on Kubuntu LTS 26.04 — Open Source & Libre
+            <div style="margin-top: 12px; font-size: 10px; opacity: 0.7;">
+                POLITIQUE DE CONFIDENTIALITÉ : SHIVA OS NE COLLECTE AUCUNE DONNÉE PERSONNELLE. LES MISES À JOUR SONT EFFECTUÉES VIA DES DÉPÔTS APT SÉCURISÉS.
+            </div>
+        </div>
+
+    </footer>
+
+    <script src="nexus.js?v=12"></script>
+    <script>
+    // 🔱 COUNTDOWN TO SHIVAOS 26.04 LTS
+    function updateCountdown() {
+        const target = new Date('2026-04-24T22:00:00');
+        const now = new Date();
+        const diff = target - now;
+        const el = document.getElementById('countdown');
+        if (!el) return;
+        if (diff <= 0) {
+            el.innerHTML = '<span style="color:var(--shiva-orange);letter-spacing:2px;font-size:1rem;font-weight:900;">🔱 ISO DISPONIBLE — TÉLÉCHARGEZ !</span>';
+            return;
+        }
+        const days = Math.floor(diff / (1000*60*60*24));
+        const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const secs = Math.floor((diff % (1000*60)) / 1000);
+        const unit = (n, label) => `<div style="text-align:center"><div style="font-size:2.5rem;font-weight:900;color:var(--shiva-orange);line-height:1">${String(n).padStart(2,'0')}</div><div style="font-size:9px;opacity:0.4;letter-spacing:2px;margin-top:4px">${label}</div></div>`;
+        const sep = `<div style="font-size:2rem;color:rgba(255,140,0,0.5);align-self:flex-start;padding-top:4px;font-weight:900">:</div>`;
+        el.innerHTML = unit(days,'JOURS') + sep + unit(hours,'HEURES') + sep + unit(mins,'MIN') + sep + unit(secs,'SEC');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  
+    // 🔱 SCROLL PROGRESS BAR
+    window.addEventListener('scroll', () => {
+        const el = document.getElementById('scroll-progress');
+        if (!el) return;
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        el.style.width = (scrollTop / docHeight * 100) + '%';
+    });
+    </script>
+</body>
+</html>
