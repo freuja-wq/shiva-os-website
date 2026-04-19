@@ -1,0 +1,37 @@
+# 🔱 SHIVA OS - GENESIS GRUB THEME (v1.0)
+
+# --- Configuration Globale ---
+title-text: "SHIVA OS 26.04 LTS"
+title-font: "DejaVu Sans Regular 16"
+title-color: "#FF8C00"
+desktop-image: "background.png"
+terminal-font: "fixed"
+
+# --- Couleurs ---
+message-font: "DejaVu Sans Regular 12"
+message-color: "#FFFFFF"
+message-bg-color: "#000000"
+
+# --- Menu ---
++ boot_menu {
+  left = 15%
+  top = 30%
+  width = 70%
+  height = 50%
+  item_font = "DejaVu Sans Regular 14"
+  item_color = "#AAAAAA"
+  selected_item_color = "#FF8C00"
+  selected_item_pixmap_style = "blob_*.png"
+  item_height = 40
+  item_padding = 10
+  item_spacing = 15
+}
+
+# --- Logo ---
++ image {
+  top = 10%
+  left = 50%
+  width = 10%
+  height = 10%
+  file = "shiva_trident_logo.png"
+}
