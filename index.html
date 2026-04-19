@@ -607,10 +607,14 @@
                     <div class="artifact-item">
                         <div class="artifact-icon">⚙️</div>
                         <div>
-                            <h4>Dépôt Shiva Purity</h4>
-                            <p style="opacity: 0.5; font-size: 0.8rem;">Pour les installations Kubuntu existantes :</p>
+                            <h4>Dépôt Officiel Shiva OS</h4>
+                            <p style="opacity: 0.5; font-size: 0.8rem;">Ajoutez la clé de confiance et le dépôt :</p>
                             <div class="command-box">
-                                <span>sudo add-apt-repository ppa:shiva-os/purity</span>
+                                <span>curl -s https://shivaos.com/repo/.gnupg/shiva-archive-key.asc | sudo gpg --dearmor -o /etc/apt/keyrings/shiva-archive-key.gpg</span>
+                                <button class="copy-btn">COPY</button>
+                            </div>
+                            <div class="command-box" style="margin-top:10px;">
+                                <span>echo "deb [signed-by=/etc/apt/keyrings/shiva-archive-key.gpg] https://shivaos.com/repo shiva main" | sudo tee /etc/apt/sources.list.d/shiva-os.list</span>
                                 <button class="copy-btn">COPY</button>
                             </div>
                         </div>
