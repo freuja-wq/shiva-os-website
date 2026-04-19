@@ -38,11 +38,10 @@ echo -e "${CYAN}🎮 Étape 4 : Forge de l'Armurerie Gaming...${NC}"
 sudo apt install -y steam lutris heroic-launcher bottles mangohud gamemode \
                      vlc obs-studio discord-canary ufw git curl python3-pip
 
-# --- ÉTAPE 5 : LES ESSENTIELS DU QUOTIDIEN (DAILY LIFE) ---
-echo -e "${CYAN}💼 Étape 5 : Installation de la suite utilitaire Shiva...${NC}"
-echo "Installation de LibreOffice, GIMP, Inkscape et outils système..."
-sudo apt install -y libreoffice libreoffice-l10n-fr gimp inkscape transmission \
-                     btop tree htop fastfetch wireguard-tools
+# --- ÉTAPE 5 : LES OPTIONNELS (DEPÔT) ---
+# echo -e "${CYAN}💼 Étape 5 : Installation de la suite utilitaire (Optionnel)...${NC}"
+# sudo apt install -y libreoffice libreoffice-l10n-fr gimp inkscape transmission \
+#                      btop tree htop fastfetch wireguard-tools
 
 # --- ÉTAPE 6 : OPTIMISATION GPU ---
 echo -e "${CYAN}⚡ Étape 6 : Injection Vulkan & Mesa Haute Performance...${NC}"
