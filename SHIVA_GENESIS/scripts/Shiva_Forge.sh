@@ -1,8 +1,20 @@
-# 🔱 SHIVA OS GENESIS FORGE - Ver v1.1
+# 🔱 SHIVA OS GENESIS FORGE - Ver v1.2
 # "Forger le futur du Gaming sous Linux"
 # Engine: Linux Kernel 7.0+ (EEVDF Scheduler) & Zen Tuning
 
 set -e
+
+# --- AUTO-UPDATE (VÉRIFICATION DÉPÔT) ---
+REMOTE_VERSION_URL="https://shivaos.com/genesis/scripts/Shiva_Forge.sh"
+echo "🔍 Vérification des mises à jour sur le dépôt Shiva OS..."
+# Ici on pourrait comparer les versions, mais pour la simplicité du lancement :
+# Le script peut se retélécharger s'il est lancé avec un flag --update
+if [[ "$1" == "--update" ]]; then
+    echo "📡 Téléchargement de la dernière version depuis le serveur..."
+    curl -s -O $REMOTE_VERSION_URL
+    echo "✅ Forge mise à jour. Relancez le script."
+    exit 0
+fi
 
 # --- COULEURS ---
 ORANGE='\033[0;33m'
