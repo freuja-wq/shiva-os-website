@@ -1,7 +1,6 @@
-#!/bin/bash
-
-# 🔱 SHIVA OS GENESIS FORGE - Ver v1.0
+# 🔱 SHIVA OS GENESIS FORGE - Ver v1.1
 # "Forger le futur du Gaming sous Linux"
+# Engine: Linux Kernel 7.0+ (EEVDF Scheduler) & Zen Tuning
 
 set -e
 
