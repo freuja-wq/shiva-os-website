@@ -19,23 +19,39 @@ sudo add-apt-repository -y ppa:dylanvanassche/liquorix # Noyau Liquorix
 sudo add-apt-repository -y ppa:lutris-team/lutris      # Lutris Official
 sudo apt update
 
-# --- ÉTAPE 2 : LE NOYAU (LE CŒUR) ---
-echo -e "${CYAN}⚙️ Étape 2 : Greffe du Noyau Liquorix (Kernel 7.x compatible)...${NC}"
+# --- ÉTAPE 2 : LE CONTRÔLEUR DE VOL (DRIVERS) ---
+echo -e "${CYAN}🏎️  Étape 2 : Détection et installation des drivers NVIDIA...${NC}"
+if lspci | grep -i nvidia > /dev/null; then
+    echo "🟢 GPU NVIDIA détecté. Forage des drivers propriétaires (Version Stable)..."
+    sudo add-apt-repository -y ppa:graphics-drivers/ppa
+    sudo apt update
+    sudo apt install -y nvidia-driver-535 nvidia-settings # Version LTS Stable conseillée
+else
+    echo "🔵 Pas de GPU NVIDIA détecté ou Drivers Mesa déjà actifs."
+fi
+
+# --- ÉTAPE 3 : LE NOYAU (LE CŒUR) ---
+echo -e "${CYAN}⚙️  Étape 3 : Greffe du Noyau Liquorix (Kernel 7.x Gaming Optimized)...${NC}"
 sudo apt install -y linux-image-liquorix-amd64 linux-headers-liquorix-amd64
 
-# --- ÉTAPE 3 : LE KIT DE COMBAT (APPS) ---
-echo -e "${CYAN}🎮 Étape 3 : Forge de l'Armurerie...${NC}"
-# Installation des essentiels
+# --- ÉTAPE 4 : LE KIT DE COMBAT (APPS GAMING) ---
+echo -e "${CYAN}🎮 Étape 4 : Forge de l'Armurerie Gaming...${NC}"
 sudo apt install -y steam lutris heroic-launcher bottles mangohud gamemode \
                      vlc obs-studio discord-canary ufw git curl python3-pip
 
-# --- ÉTAPE 4 : OPTIMISATION GPU ---
-echo -e "${CYAN}⚡ Étape 4 : Injection Vulkan & Mesa...${NC}"
+# --- ÉTAPE 5 : LES ESSENTIELS DU QUOTIDIEN (DAILY LIFE) ---
+echo -e "${CYAN}💼 Étape 5 : Installation de la suite utilitaire Shiva...${NC}"
+echo "Installation de LibreOffice, GIMP, Inkscape et outils système..."
+sudo apt install -y libreoffice libreoffice-l10n-fr gimp inkscape transmission \
+                     btop tree htop fastfetch wireguard-tools
+
+# --- ÉTAPE 6 : OPTIMISATION GPU ---
+echo -e "${CYAN}⚡ Étape 6 : Injection Vulkan & Mesa Haute Performance...${NC}"
 sudo apt upgrade -y   # Appliquer les drivers Mesa Git
 sudo apt install -y mesa-vulkan-drivers libvulkan1 vulkan-tools
 
-# --- ÉTAPE 5 : CONFIGURATION SHIVA (TUNING) ---
-echo -e "${CYAN}🔧 Étape 5 : Calibration du système...${NC}"
+# --- ÉTAPE 7 : CONFIGURATION SHIVA (TUNING) ---
+echo -e "${CYAN}🔧 Étape 7 : Calibration du système...${NC}"
 
 # 1. Optimisation des limites pour le gaming (Esync/Fsync)
 echo "👑 Réglage des limites système..."
@@ -65,8 +81,8 @@ fps
 frame_timing
 EOF
 
-# --- ÉTAPE 6 : ACTIVATION DES SERVICES ---
-echo -e "${CYAN}🚀 Étape 6 : Activation des réacteurs...${NC}"
+# --- ÉTAPE 8 : ACTIVATION DES SERVICES ---
+echo -e "${CYAN}🚀 Étape 8 : Activation des réacteurs...${NC}"
 sudo systemctl enable --now shiva-store.service || echo "⚠️ Service Store pas encore installé sur cette machine"
 sudo ufw allow 5050/tcp # Port de l'Oracle Shiva
 sudo ufw enable
